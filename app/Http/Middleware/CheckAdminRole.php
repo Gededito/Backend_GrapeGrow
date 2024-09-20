@@ -20,7 +20,7 @@ class CheckAdminRole
         if(Auth::guard('sanctum')->check())
         {
             // Periksa peran pengguna
-            if(Auth::guard('sanctum')->user()->roles != 'admin') {
+            if(Auth::guard('sanctum')->user()->roles != 'ADMIN') {
                 // Jika bukan ADMIN, kembalikan response atau alihkan
                 return response()->json(['error' => 'Anda tidak memiliki akses'], 403);
             }

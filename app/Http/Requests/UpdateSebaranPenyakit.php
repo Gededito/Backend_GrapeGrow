@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateVarietasRequest extends FormRequest
+class UpdateSebaranPenyakit extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,12 @@ class UpdateVarietasRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama' => 'string|max:255',
-            'deskripsi' => 'required|string',
-            'karakteristik' => 'required|string',
-            'gambar' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'nama' => 'string',
+            'gejala' => 'string',
+            'solusi' => 'string',
+            'gambar' => 'image|mimes:jpeg,png,jpg,gif',
+            'lat' => 'numeric',
+            'lon' => 'numeric'
         ];
     }
 }

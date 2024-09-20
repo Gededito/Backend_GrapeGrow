@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class VarietasAnggurController extends Controller
 {
-    // Get All
     public function index(Request $request)
     {
         $varietas = VarietasAnggur::when($request->id, function($request, $id) {
@@ -22,14 +21,11 @@ class VarietasAnggurController extends Controller
         ]);
     }
 
-    // Get Varietas By Id
     public function getById(Request $request, $id)
     {
         try {
-            // Cari data berdasarkan Id
-            $varietas = \App\Models\VarietasAnggur::findOrFail($id);
+            $varietas = VarietasAnggur::findOrFail($id);
 
-            // Jika data ditemukan
             return response()->json([
                 'status' => 'success',
                 'data' => $varietas,

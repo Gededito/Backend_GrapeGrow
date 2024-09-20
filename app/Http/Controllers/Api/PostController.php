@@ -14,7 +14,6 @@ use Illuminate\Validation\ValidationException;
 
 class PostController extends Controller
 {
-    // Get All Post Forum
     public function index()
     {
         $post = Posts::with('user')->latest()->get();
@@ -25,7 +24,6 @@ class PostController extends Controller
         ], 200);
     }
 
-    // Add Post Forum
     public function store(PostRequest $request)
     {
         $validatedData = $request->validated();
@@ -47,10 +45,8 @@ class PostController extends Controller
         ], 201);
     }
 
-    // Like Post Forum
     public function likePost($post_id)
     {
-        // Find the Post
         $post = Posts::find($post_id);
 
         if (!$post)
@@ -60,20 +56,17 @@ class PostController extends Controller
             ], 404);
         }
 
-        // Check if the user has already liked the post
         $existingLike = LikePost::where('user_id', auth()->id())
                                 -> where('post_id', $post_id)
                                 ->first();
 
         if ($existingLike) {
-            // Unlike the Post
             $existingLike->delete();
             return response()->json([
                 'message' => 'Post unliked successfully',
                 'liked' => false,
             ], 200);
         } else {
-            // Like the Post
             LikePost::create([
                 'user_id' => auth()->id(),
                 'post_id' => $post_id,
@@ -85,10 +78,8 @@ class PostController extends Controller
         }
     }
 
-    // Comment Post Forum
     public function comment(Request $request, $post_id)
     {
-        // Validate the request data
         try {
             $validatedData = $request->validate([
                 'body' => 'required|string',
@@ -102,7 +93,6 @@ class PostController extends Controller
             ], 422);
         }
 
-        // Find the Post
         $post = Posts::find($post_id);
         if (!$post) {
             return response()->json([
@@ -135,23 +125,8 @@ class PostController extends Controller
 
     public function getComments($post_id)
     {
-        // try {
-        //     $comments = Comment::with('post')->with('user')->wherePostId($post_id)->latest()->get();
-
-        //         return response()->json([
-        //             'comments' => $comments
-        //         ], 200);
-
-        // } catch (ValidationException $e) {
-        //     return response()->json([
-        //         'error' => 'Error retrieving comments',
-        //         'message' => $e->getMessage()
-        //     ], 500);
-        // }
-
         try {
             $comments = Comment::with('post')->with('user')->wherePostId($post_id)->latest()->get();
-            // $comments = Comment::with('post', 'user')->where('post_id', $post_id)->latest()->get();
 
             if ($comments->isEmpty()) {
                 return response()->json([
@@ -162,6 +137,7 @@ class PostController extends Controller
             return response()->json([
                 'commments' => $comments
             ], 200);
+
         } catch (Exception $e) {
             Log::error('Error retrieving comments: ' . $e->getComments());
 

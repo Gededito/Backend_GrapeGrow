@@ -11,14 +11,11 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    //
     public function index(Request $request)
     {
-        // $users = \App\Models\User::paginate(10);
-
         $users = DB::table('users')
         ->when($request->input('name'), function ($query, $name) {
-            return $query->where('name', 'like', '%'.$name.'%');
+            return $query->where('name', 'like', '%' . $name . '%');
         })
         ->orderBy('id', 'desc')
         ->paginate(100);
@@ -32,14 +29,14 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request)
     {
-        $profilePhotoPath = null; // Initialize
+        $profilePhotoPath = null;
         if ($request->hasFile('profile_photo')) {
             $profilePhotoPath = $request->file('profile_photo')->store('profile_photos', 'public');
         }
 
         $data = $request->all();
         $data['password'] = Hash::make($request->password);
-        $data['profile_photo'] = $profilePhotoPath; // Add the path to the $data array
+        $data['profile_photo'] = $profilePhotoPath;
 
         User::create($data);
         return redirect()->route('user.index')->with('success', 'User successfully created');
@@ -47,7 +44,7 @@ class UserController extends Controller
 
     public function edit($id)
     {
-        $user = \App\Models\User::findOrFail($id);
+        $user = User::findOrFail($id);
         return view('pages.users.edit', compact('user'));
     }
 

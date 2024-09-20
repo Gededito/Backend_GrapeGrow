@@ -36,7 +36,47 @@
                 <ul class="dropdown-menu">
                     <li>
                         <a class="nav-link"
-                            href="{{ route('hama.index') }}">All Hama</a>
+                            href="{{ route('penyakit.index') }}">All Hama</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#"
+                    class="nav-link has-dropdown"><span>Sebaran Hama & Penyakit Anggur</span></a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="nav-link"
+                            href="{{ route('sebaran_penyakit.index') }}">All Sebaran</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#"
+                    class="nav-link has-dropdown"><span>Sebaran Varietas Anggur</span></a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="nav-link"
+                            href="{{ route('sebaran_varietas.index') }}">All Sebaran</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#"
+                    class="nav-link has-dropdown"><span>Kategori Modul Budidaya</span></a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="nav-link"
+                            href="{{ route('category_class.index') }}">All Modul</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#"
+                    class="nav-link has-dropdown"><span>Kumpulan Video Modul</span></a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="nav-link"
+                            href="{{ route('course_video.index') }}">All Video</a>
                     </li>
                 </ul>
             </li>

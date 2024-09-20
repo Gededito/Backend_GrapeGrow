@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-
 class LoginController extends Controller
 {
     public function showLoginForm()
@@ -21,7 +20,6 @@ class LoginController extends Controller
             $user = Auth::user();
 
             if ($user->roles != 'ADMIN') {
-                Auth::logout();
                 return redirect('/')->withErrors(['access' => 'Anda tidak memiliki akses']);
             }
 

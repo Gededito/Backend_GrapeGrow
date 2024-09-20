@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SebaranHamaRequest extends FormRequest
+class UpdateSebaranVarietas extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,13 @@ class SebaranHamaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama' => 'required|string',
-            'gejala' => 'required|string',
-            'solusi' => 'required|string',
+            'nama' => 'string',
             'gambar' => 'image|mimes:jpeg,png,jpg,gif',
-            'lat' => 'required|numeric',
-            'lon' => 'required|numeric'
+            'deskripsi' => 'string',
+            'jumlah_tanaman' => 'string',
+            'menjual_bibit' => 'boolean',
+            'lat' => 'numeric',
+            'lon' => 'numeric',
         ];
     }
 }

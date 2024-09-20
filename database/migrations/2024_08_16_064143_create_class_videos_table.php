@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sebaran_penyakits', function (Blueprint $table) {
+        Schema::create('class_videos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('nama');
-            $table->text('gejala');
-            $table->text('solusi');
-            $table->string('gambar');
-            $table->double('lat');
-            $table->double('lon');
+            $table->string('path_video');
+            $table->string('thumbnail_video');
+            $table->unsignedBigInteger('category_classes_id');
+            $table->foreign('category_classes_id')->references('id')->on('category_classes')->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sebaran_penyakits');
+        Schema::dropIfExists('class_videos');
     }
 };

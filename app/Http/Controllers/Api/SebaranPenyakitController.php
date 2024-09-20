@@ -3,20 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\SebaranPenyakit;
 use Illuminate\Http\Request;
+use App\Models\SebaranPenyakit;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\SebaranPenyakitRequest;
+use App\Http\Requests\UpdateSebaranPenyakit;
 
 class SebaranPenyakitController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
         $sebaranPenyakit = SebaranPenyakit::with('user')->latest()->get();
 
         return response()->json([
@@ -25,30 +21,16 @@ class SebaranPenyakitController extends Controller
         ], 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(SebaranPenyakitRequest $request)
     {
-        //
         try {
-
             $validatedData = $request->validated();
 
-            // Penanganan Gambar Yang Diunggah
             if ($request->hasFile('gambar')) {
                 $imagePenyakit = $request->file('gambar')->store('sebaran_penyakit', 'public');
                 $validatedData['gambar'] = $imagePenyakit;
             } else {
-                $validatedData['gambar'] = 'images/icon-default.png';
+                $validatedData['gambar'] = 'path/to/default_image.jpg';
             }
 
             $validatedData['lat'] = $request->lat;
@@ -56,52 +38,84 @@ class SebaranPenyakitController extends Controller
 
             $sebaranPenyakit = auth()->user()->sebaranPenyakit()->create($validatedData);
 
-            return response()->json([
+            return response([
                 'status' => 'success',
-                'message' => 'Sebaran Penyakit Berhasil Dibuat',
-                'sebaranPenyakit' => $sebaranPenyakit,
+                'message' => 'SebaranPenyakit created successfully',
+                'sebaranPenyakit' => $sebaranPenyakit
             ], 201);
 
-        } catch(\Exception $e) {
-
-            // Menangani Error
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Terjadi Kesalahan: ' . $e->getMessage(),
-            ]);
-
+                'message' => 'Terjadi kesalahan ' . $e->getMessage()
+            ], 500);
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(SebaranPenyakit $sebaranPenyakit)
+    public function update($id, UpdateSebaranPenyakit $request)
     {
-        //
+        try {
+            $sebaranPenyakit = SebaranPenyakit::findOrFail($id);
+
+            if ($sebaranPenyakit->user_id !== auth()->user()->id) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Anda tidak memiliki akses',
+                ], 403);
+            }
+
+            $validatedData = $request->validated();
+
+            if ($request->hasFile('gambar')) {
+                if ($sebaranPenyakit->gambar && Storage::disk('public')->exists($sebaranPenyakit->gambar)) {
+                    Storage::disk('public')->delete($sebaranPenyakit->gambar);
+                }
+
+                $imagePenyakit = $request->file('gambar')->store('sebaran_penyakit', 'public');
+                $validatedData['gambar'] = $imagePenyakit;
+            }
+
+            $validatedData['lat'] = $request->lat;
+            $validatedData['lon'] = $request->lon;
+
+            $sebaranPenyakit->update($validatedData);
+
+            return response([
+                'status' => 'success',
+                'message' => 'Sebaran Penyakit Berhasil Diperbarui',
+                'sebaranPenyakit' => $sebaranPenyakit
+            ], 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan ' . $e->getMessage()
+            ], 500);
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(SebaranPenyakit $sebaranPenyakit)
-    {
-        //
-    }
+    public function delete($id) {
+        try {
+            $sebaranPenyakit = SebaranPenyakit::findOrFail($id);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, SebaranPenyakit $sebaranPenyakit)
-    {
-        //
-    }
+            if ($sebaranPenyakit->user_id !== auth()->user()->id) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Anda tidak memiliki akses',
+                ], 403);
+            }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(SebaranPenyakit $sebaranPenyakit)
-    {
-        //
+            $sebaranPenyakit->delete();
+
+            return response([
+                'status' => 'success',
+                'message' => 'Sebaran Penyakit Berhasil Dihapuskan'
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

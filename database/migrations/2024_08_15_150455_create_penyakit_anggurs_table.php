@@ -11,16 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sebaran_hamas', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+        Schema::create('penyakit_anggurs', function (Blueprint $table) {
+            $table->id();
             $table->string('nama');
             $table->text('gejala');
             $table->text('solusi');
+            $table->text('penyebab');
             $table->string('gambar');
-            $table->double('lat');
-            $table->double('lon');
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sebaran_hamas');
+        Schema::dropIfExists('penyakit_anggurs');
     }
 };

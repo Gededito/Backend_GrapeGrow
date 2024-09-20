@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Edit OPT')
+@section('title', 'Create New OPT')
 
 @push('style')
     <!-- CSS Libraries -->
@@ -17,26 +17,25 @@
         <section class="section">
             <div class="section-header">
                 <div class="section-header-back">
-                    <a href="{{ route('hama.index') }}"
+                    <a href="{{ route('penyakit.index') }}"
                         class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
                 </div>
-                <h1>Edit OPT</h1>
+                <h1>Create New OPT</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="#">Edit</a></div>
+                    <div class="breadcrumb-item"><a href="#">Tambah</a></div>
                     <div class="breadcrumb-item"></div>Opt
                 </div>
             </div>
 
             <div class="section-body">
-                <h2 class="section-title">Edit OPT</h2>
+                <h2 class="section-title">Create New OPT</h2>
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
                             <!-- Digunakan Untuk Melakukan Penginputan -->
-                            <form action="{{ route('hama.update', $hama->id) }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('penyakit.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
-                                @method('PUT')
                                 <div class="card-header">
                                     <h4>Input OPT</h4>
                                 </div>
@@ -46,7 +45,7 @@
                                         <div class="col-sm-12 col-md-7">
                                             <input id="nama" type="text" class="form-control @error('nama')
                                                 is-invalid
-                                            @enderror" name="nama" autofocus value="{{ $hama->nama }}">
+                                            @enderror" name="nama" autofocus>
                                             @error('nama')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
@@ -60,7 +59,7 @@
                                             <textarea name="gejala" id="gejala" data-height="150"
                                                 class="form-control @error('gejala')
                                                     is-invalid
-                                                @enderror" placeholder="Tuliskan Gejala Yang Dialami">{{ $hama->gejala }}</textarea>
+                                                @enderror" placeholder="Tuliskan Gejala Yang Dialami"></textarea>
                                             @error('gejala')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
@@ -74,7 +73,7 @@
                                             <textarea name="solusi" id="solusi" data-height="150"
                                                 class="form-control @error('solusi')
                                                     is-invalid
-                                                @enderror" placeholder="Tuliskan Cara Pencegahannya">{{ $hama->solusi }}</textarea>
+                                                @enderror" placeholder="Tuliskan Cara Pencegahannya"></textarea>
                                             @error('solusi')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
@@ -88,7 +87,7 @@
                                             <textarea name="penyebab" id="penyebab" data-height="150"
                                                 class="form-control @error('penyebab')
                                                     is-invalid
-                                                @enderror" placeholder="Tuliskan Penyebabnya">{{ $hama->penyebab }}</textarea>
+                                                @enderror" placeholder="Tuliskan Penyebabnya"></textarea>
                                             @error('penyebab')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
@@ -99,19 +98,16 @@
                                     <div class="form-group row mb-4">
                                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="gambar">Foto OPT</label>
                                         <div class="col-sm-12 col-md-7">
-                                            @if ($hama->gambar)
-                                                <img src="{{ asset('storage/' . $hama->gambar) }}" class="img-thumbnail mb-2" alt="Gambar Hama" style="max-height: 200px">
-                                            @endif
                                             <div id="image-preview" class="image-preview">
                                                 <label for="image-upload" id="image-label">Choose File</label>
-                                                <input type="file" name="gambar" id="image-upload" class="form-control-file" value="{{ $hama->gambar }}"/>
+                                                <input type="file" name="gambar" id="image-upload" class="form-control-file"/>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group row mb-4">
                                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
                                         <div class="col-sm-12 col-md-7">
-                                            <button class="btn btn-primary">Update Hama</button>
+                                            <button class="btn btn-primary">Tambah Penyakit</button>
                                         </div>
                                     </div>
                                 </div>

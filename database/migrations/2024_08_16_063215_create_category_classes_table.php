@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('hama_anggurs', function (Blueprint $table) {
+        Schema::create('category_classes', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->text('gejala');
-            $table->text('solusi');
-            $table->text('penyebab');
-            $table->string('gambar');
+            $table->string('name');
+            $table->string('about');
+            $table->string('thumbnail_category');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('hama_anggurs');
+        Schema::dropIfExists('category_classes');
     }
 };

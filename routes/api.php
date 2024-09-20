@@ -3,11 +3,12 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\HamaAnggurController;
+use App\Http\Controllers\Api\PenyakitAnggurController;
 use App\Http\Controllers\Api\VarietasAnggurController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\SebaranPenyakitController;
 use App\Http\Controllers\Api\SebaranVarietasController;
+use App\Http\Controllers\Api\ModulBudidayaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,10 +38,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     // API Get All Hama
-    Route::get('/hama', [HamaAnggurController::class, 'index']);
+    Route::get('/penyakit', [PenyakitAnggurController::class, 'index']);
 
     // API Get By Id Hama
-    Route::get('/hama/{id}', [HamaAnggurController::class, 'getById']);
+    Route::get('/penyakit/{id}', [PenyakitAnggurController::class, 'getById']);
 
     // API Get All Varietas
     Route::get('/varietas', [VarietasAnggurController::class, 'index']);
@@ -63,19 +64,33 @@ Route::middleware('auth:sanctum')->group(function () {
     // API Get CommentForum By Id PostForum
     Route::get('/post/comments/{post_id}', [PostController::class, 'getComments']);
 
-    // API Add SebaranHama
-    // Route::post('/sebaran/hama/tambah', [SebaranHamaController::class, 'store']);
-
-    // // API Get All SebaranHama
-    // Route::get('/sebaran/hama', [SebaranHamaController::class, 'index']);
-
+    // API Add SebaranPenyakit
     Route::post('/sebaran_penyakit/add', [SebaranPenyakitController::class, 'store']);
 
+    // API Update SebaranPenyakit
+    Route::put('/sebaran_penyakit/update/{id}', [SebaranPenyakitController::class, 'update']);
+
+    // API Delete SebaranPenyakit
+    Route::delete('/sebaran_penyakit/delete/{id}', [SebaranPenyakitController::class, 'delete']);
+
+    // API Get All SebaranPenyakit
     Route::get('/sebaran_penyakit', [SebaranPenyakitController::class, 'index']);
 
     // API Add SebaranVarietas
-    Route::post('/sebaran/varietas/isi', [SebaranVarietasController::class, 'store']);
+    Route::post('/sebaran_varietas/add', [SebaranVarietasController::class, 'store']);
+
+    // API Update SebaranVarietas
+    Route::put('/sebaran_varietas/update/{id}', [SebaranVarietasController::class, 'update']);
+
+    // API Delete SebaranVarietas
+    Route::delete('/sebaran_varietas/delete/{id}', [SebaranVarietasController::class, 'delete']);
 
     // API Get All SebaranVarietas
-    Route::get('/sebaran/varietas', [SebaranVarietasController::class, 'index']);
+    Route::get('/sebaran_varietas', [SebaranVarietasController::class, 'index']);
+
+    // API Get All Modul Budidaya
+    Route::get('/modul_budidaya', [ModulBudidayaController::class, 'index']);
+
+    // API Get All Modul Budidaya
+    Route::get('/modul_budidaya/{category_classes_id}', [ModulBudidayaController::class, 'getVideoModul']);
 });

@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
-    // Function Register
     public function register(Request $request)
     {
         $validatedData = $request->validate([
@@ -22,7 +21,6 @@ class AuthController extends Controller
             'profile_photo' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Handle profile photo upload (if provided)
         $profilePhotoPath = null;
         if ($request->hasFile('profile_photo')) {
             $profilePhotoPath = Storage::disk('public')->putFile('profile_photos', $request->file('profile_photo'));
@@ -37,7 +35,6 @@ class AuthController extends Controller
             'profile_photo' => $profilePhotoPath,
         ]);
 
-        // Membuat Token Auth
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
@@ -46,7 +43,6 @@ class AuthController extends Controller
         ]);
     }
 
-    // Function Login
     public function login(Request $request)
     {
         $loginData = $request->validate([
@@ -81,7 +77,6 @@ class AuthController extends Controller
         ]);
     }
 
-    // Function Logout
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();

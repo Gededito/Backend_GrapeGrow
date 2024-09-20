@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreHamaRequest extends FormRequest
+class UpdateClassVideoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,10 @@ class StoreHamaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
             'nama' => 'required|string|max:255',
-            'gejala' => 'required|string',
-            'solusi' => 'required|string',
-            'penyebab' => 'required|string',
-            'gambar' => 'image:mimes:jpeg,png,jpg,gif|max:2048',
+            'path_video' => 'sometimes|string|max:255',
+            'thumbnail_video' => 'sometimes|image|mimes:png,jpg,jpeg,svg',
+            'category_class_id' => 'sometimes|integer',
         ];
     }
 }
