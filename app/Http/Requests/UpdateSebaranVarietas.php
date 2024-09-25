@@ -22,13 +22,13 @@ class UpdateSebaranVarietas extends FormRequest
     public function rules(): array
     {
         return [
-            'nama' => 'string',
-            'gambar' => 'image|mimes:jpeg,png,jpg,gif',
-            'deskripsi' => 'string',
-            'jumlah_tanaman' => 'string',
-            'menjual_bibit' => 'boolean',
-            'lat' => 'numeric',
-            'lon' => 'numeric',
+            'nama' => 'required',
+            'gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'deskripsi' => 'required',
+            'jumlah_tanaman' => 'required',
+            'menjual_bibit' => 'required',
+            'lat' => 'required',
+            'lon' => 'required',
         ];
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\SebaranPenyakitController;
 use App\Http\Controllers\SebaranVarietasController;
 use App\Http\Controllers\CategoryClassController;
 use App\Http\Controllers\ClassVideoController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,6 +35,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('home', function () {
         return view('pages.dashboard');
     })->name('home');
+
+    Route::get('home', [DashboardController::class, 'index'])->name('home');
 
 
     Route::middleware(['check.admin'])->group(function () {
