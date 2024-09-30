@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SebaranVarietas;
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\SebaranVarietasRequest;
 use App\Http\Requests\UpdateSebaranVarietas;
 
@@ -57,42 +57,49 @@ class SebaranVarietasController extends Controller
 
     public function update($id, Request $request)
     {
-        $sebaranVarietas = SebaranVarietas::find($id);
+        try {
+            $data = $request->all();
+            $sebaranVarietas = SebaranVarietas::findOrFail($id);
 
-        if (!$sebaranVarietas) {
+            if ($sebaranVarietas->user_id !== auth()->user()->id) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Anda Tidak Memiliki Akses',
+                ], 403);
+            }
+
+            $validator = Validator::make($data, [
+               'nama' => 'sometimes|string|max:255',
+               'deskripsi' => 'sometimes|string',
+               'jumlah_tanaman' => 'sometimes|numeric',
+               'menjual_bibit' => 'sometimes|boolean',
+               'lat' => 'sometimes|numeric',
+               'lon' => 'sometimes|numeric',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $validator->errors()
+                ], 403);
+            }
+
+            $sebaranVarietas->fill($request->only('nama', 'deskripsi', 'menjual_bibit', 'lat', 'lon'));
+            $sebaranVarietas->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Sebaran Varietas updated successfully',
+                'sebaranVarietas' => $sebaranVarietas,
+            ], 200); // Ubah response code menjadi 200 OK
+
+        } catch (\Exception $e) {
+            Log::error('Error saat mengupdate data: ' . $e->getMessage());
             return response()->json([
                 'status' => 'error',
-                'message' => 'Data Tidak Ditemukan',
-            ], 404);
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+            ], 500);
         }
-
-        $validatedData = $request->validate([
-            'nama' => 'required|string|max:255',
-            'gambar' => 'sometimes|image',
-            'deskripsi' => 'required|string',
-            'jumlah_tanaman' => 'required|integer',
-            'menjual_bibit' => 'required|boolean',
-            'lat' => 'required|float',
-            'lon' => 'required|float',
-        ]);
-
-        if ($request->hasFile('gambar')) {
-            // Hapus Gambar Lama Jika Ada
-            if ($sebaranVarietas->gambar) {
-                Storage::disk('public')->delete($sebaranVarietas->gambar);
-            }
-            $validatedData['gambar'] = $request->file('gambar')->store('sebaran_varietas', 'public');
-        }
-
-        log('Validate Data: ', $validatedData);
-
-        $sebaranVarietas->update($validatedData);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Berhasil Memperbarui Data',
-            'sebaranVarietas' => $sebaranVarietas,
-        ], 200);
     }
 
     public function delete($id) {

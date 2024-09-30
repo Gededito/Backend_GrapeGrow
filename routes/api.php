@@ -68,7 +68,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/sebaran_penyakit/add', [SebaranPenyakitController::class, 'store']);
 
     // API Update SebaranPenyakit
-    Route::put('/sebaran_penyakit/update/{id}', [SebaranPenyakitController::class, 'update']);
+    Route::put('/sebaran_penyakit/{id}', [SebaranPenyakitController::class, 'update']);
 
     // API Delete SebaranPenyakit
     Route::delete('/sebaran_penyakit/delete/{id}', [SebaranPenyakitController::class, 'delete']);
@@ -80,7 +80,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/sebaran_varietas/add', [SebaranVarietasController::class, 'store']);
 
     // API Update SebaranVarietas
-    Route::put('/sebaran_varietas/update/{id}', [SebaranVarietasController::class, 'update']);
+    Route::put('/sebaran_varietas/{id}', [SebaranVarietasController::class, 'update']);
 
     // API Delete SebaranVarietas
     Route::delete('/sebaran_varietas/delete/{id}', [SebaranVarietasController::class, 'delete']);

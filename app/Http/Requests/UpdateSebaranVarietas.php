@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateSebaranVarietas extends FormRequest
 {
@@ -22,13 +23,21 @@ class UpdateSebaranVarietas extends FormRequest
     public function rules(): array
     {
         return [
-            'nama' => 'required',
-            'gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'deskripsi' => 'required',
-            'jumlah_tanaman' => 'required',
-            'menjual_bibit' => 'required',
-            'lat' => 'required',
-            'lon' => 'required',
+            'nama' => 'required|string|max:255',
+            'gambar' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'deskripsi' => 'required|string',
+            'jumlah_tanaman' => 'required|string',
+            'menjual_bibit' => 'required|boolean',
+            'lat' => 'required|numeric',
+            'lon' => 'required|numeric',
+        ];
+    }
+
+    public function message()
+    {
+        return [
+            'nama.unique' => 'Nama Varietas sudah ada',
+            'gambar.mimes' => 'Format gambar harus jpeg, png, jpg, atau gif.',
         ];
     }
 }

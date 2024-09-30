@@ -22,13 +22,13 @@ class SebaranVarietasRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama' => 'required|string',
-            'gambar' => 'image|mimes:jpeg,png,jpg,gif',
+            'nama' => 'required|string|max:255',
             'deskripsi' => 'required|string',
-            'jumlah_tanaman' => 'required|string',
-            'menjual_bibit' => 'required|boolean',
+            'gambar' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'lat' => 'required|numeric',
             'lon' => 'required|numeric',
+            'jumlah_tanaman' => 'required|numeric',
+            'menjual_bibit' => 'required|boolean',
         ];
     }
 }

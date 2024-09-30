@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SebaranPenyakit;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\SebaranPenyakitRequest;
 use App\Http\Requests\UpdateSebaranPenyakit;
 
@@ -52,37 +54,40 @@ class SebaranPenyakitController extends Controller
         }
     }
 
-    public function update($id, UpdateSebaranPenyakit $request)
+    public function update($id, Request $request)
     {
         try {
+            $data = $request->all();
             $sebaranPenyakit = SebaranPenyakit::findOrFail($id);
 
             if ($sebaranPenyakit->user_id !== auth()->user()->id) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Anda tidak memiliki akses',
+                    'message' => 'Anda Tidak Memiliki Akses',
                 ], 403);
             }
 
-            $validatedData = $request->validated();
+            $validator = Validator::make($data, [
+                'nama' => 'sometimes|string|max:255',
+                'gejala' => 'sometimes|string',
+                'solusi' => 'sometimes|string',
+                'lat' => 'sometimes|numeric',
+                'lon' => 'sometimes|numeric',
+            ]);
 
-            if ($request->hasFile('gambar')) {
-                if ($sebaranPenyakit->gambar && Storage::disk('public')->exists($sebaranPenyakit->gambar)) {
-                    Storage::disk('public')->delete($sebaranPenyakit->gambar);
-                }
-
-                $imagePenyakit = $request->file('gambar')->store('sebaran_penyakit', 'public');
-                $validatedData['gambar'] = $imagePenyakit;
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $validator->errors()
+                ], 403);
             }
 
-            $validatedData['lat'] = $request->lat;
-            $validatedData['lon'] = $request->lon;
+            $sebaranPenyakit->fill($request->only('nama', 'gejala', 'solusi', 'lat', 'lon'));
+            $sebaranPenyakit->save();
 
-            $sebaranPenyakit->update($validatedData);
-
-            return response([
+            return response()->json([
                 'status' => 'success',
-                'message' => 'Sebaran Penyakit Berhasil Diperbarui',
+                'message' => 'Sebaran Penyakit updated successfully',
                 'sebaranPenyakit' => $sebaranPenyakit
             ], 200);
 
